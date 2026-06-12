@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Historia Mundial — Línea del Tiempo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0c0a;
+    --bg2: #141310;
+    --bg3: #1a1815;
+    --line: rgba(255,255,255,0.08);
+    --text: #e8e4d8;
+    --muted: #7a7468;
+    --faint: #3a3830;
+
+    --medieval:    #9b8fdc;
+    --exploration: #4db893;
+    --revolution:  #e07a45;
+    --modern:      #5a9fd4;
+    --war:         #d45a5a;
+    --coldwar:     #c9a040;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-weight: 300;
+    line-height: 1.7;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── NOISE TEXTURE OVERLAY ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.5;
+  }
+
+  /* ─── COVER INFO ─── */
+  .cover-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 2rem 2.5rem 1.5rem;
+    border-bottom: 1px solid var(--line);
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+
+  .cover-school {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .cover-school-sub {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-top: 4px;
+    display: block;
+  }
+
+  .cover-meta {
+    text-align: right;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2;
+    letter-spacing: 0.04em;
+  }
+
+  .cover-meta strong {
+    color: var(--text);
+    font-weight: 400;
+  }
+
+  .cover-divider {
+    width: 1px;
+    background: var(--line);
+    align-self: stretch;
+    min-height: 50px;
+  }
+
+  .cover-students {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 2;
+    letter-spacing: 0.04em;
+  }
+
+  .cover-students strong {
+    color: var(--text);
+    font-weight: 400;
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  @media (max-width: 600px) {
+    .cover-info { flex-direction: column; gap: 1.2rem; }
+    .cover-divider { display: none; }
+    .cover-meta { text-align: left; }
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    position: relative;
+    text-align: center;
+    padding: 7rem 2rem 5rem;
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(ellipse, rgba(155,143,220,0.08) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .header-eyebrow {
+    font-family: 'Source Serif 4', serif;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  h1 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    font-weight: 900;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  h1 em {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  .header-sub {
+    font-size: 1.05rem;
+    color: var(--muted);
+    max-width: 520px;
+    margin: 0 auto 3rem;
+    line-height: 1.8;
+  }
+
+  /* ─── ERA LEGEND ─── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.6rem 1.2rem;
+    margin-top: 2rem;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    transition: color 0.2s;
+    text-decoration: none;
+  }
+  .legend-item:hover { color: var(--text); }
+
+  .legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ─── ERA SECTION ─── */
+  .era-section {
+    margin-top: 5rem;
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .era-section.visible { opacity: 1; transform: translateY(0); }
+
+  .era-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.2rem;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .era-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    font-weight: 900;
+    line-height: 1;
+    opacity: 0.12;
+    flex-shrink: 0;
+  }
+
+  .era-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  .era-period {
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: block;
+    margin-top: 4px;
+  }
+
+  .era-stripe {
+    display: block;
+    width: 3px;
+    height: 32px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    align-self: center;
+  }
+
+  /* ─── EVENT CARDS ─── */
+  .events-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .event-card {
+    background: var(--bg2);
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    min-height: 0;
+    transition: background 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .event-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .event-card:hover { background: var(--bg3); }
+  .event-card:hover::before { opacity: 1; }
+
+  .event-year-col {
+    padding: 1.8rem 1.5rem;
+    border-right: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .event-year {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+
+  .event-tag {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 3px 7px;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+  }
+
+  .event-body {
+    padding: 1.8rem 2rem;
+  }
+
+  .event-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+  }
+
+  .event-desc {
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.75;
+  }
+
+  .event-figures {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .figure-chip {
+    font-size: 10px;
+    letter-spacing: 0.05em;
+    padding: 3px 9px;
+    border-radius: 20px;
+    border: 1px solid var(--faint);
+    color: var(--muted);
+  }
+
+  .event-impact {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--line);
+    font-size: 0.82rem;
+    color: var(--muted);
+    display: flex;
+    gap: 0.6rem;
+    align-items: flex-start;
+  }
+
+  .impact-label {
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faint);
+    flex-shrink: 0;
+    padding-top: 2px;
+  }
+
+  /* ─── ERA COLOR SCHEMES ─── */
+  .era-medieval  { --era-color: var(--medieval); }
+  .era-exploration { --era-color: var(--exploration); }
+  .era-revolution { --era-color: var(--revolution); }
+  .era-modern { --era-color: var(--modern); }
+  .era-war { --era-color: var(--war); }
+  .era-coldwar { --era-color: var(--coldwar); }
+
+  .era-section .era-stripe { background: var(--era-color); }
+  .era-section .era-title  { color: var(--era-color); }
+  .era-section .event-card::before { background: var(--era-color); }
+  .era-section .event-year { color: var(--era-color); }
+  .era-section .event-tag  {
+    background: color-mix(in srgb, var(--era-color) 12%, transparent);
+    color: var(--era-color);
+    border: 1px solid color-mix(in srgb, var(--era-color) 25%, transparent);
+  }
+  .era-section .era-number { color: var(--era-color); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    text-align: center;
+    padding: 3rem 2rem;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--faint);
+    text-transform: uppercase;
+  }
+
+  /* ─── SCROLL ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .event-card { grid-template-columns: 1fr; }
+    .event-year-col {
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+      flex-direction: row;
+      align-items: center;
+      padding: 1rem 1.25rem;
+      gap: 10px;
+    }
+    .event-body { padding: 1.2rem 1.25rem; }
+    h1 { font-size: 2.8rem; }
+    .era-header { gap: 0.8rem; }
+    .era-number { font-size: 2rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER INFO BAR -->
+<div class="cover-info">
+  <div>
+    <div class="cover-school">Gimnasio Franciscano de Suba</div>
+    <span class="cover-school-sub">Institución Educativa</span>
+  </div>
+  <div class="cover-divider"></div>
+  <div class="cover-students">
+    <strong>Estudiantes</strong>
+    Uriel Felipe Narvaez Quiroga<br>
+    Camilo Andres Gonzalez Lopez
+  </div>
+  <div class="cover-divider"></div>
+  <div class="cover-meta">
+    <span>Docente &nbsp;<strong>Mayerli</strong></span><br>
+    <span>Materia &nbsp;<strong>Ciencias Sociales</strong></span><br>
+    <span>Año &nbsp;<strong>2025</strong></span>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header>
+  <span class="header-eyebrow">Compendio de Historia Universal</span>
+  <h1>Historia<br><em>del Mundo</em></h1>
+  <p class="header-sub">
+    De la Edad Media al fin de la Guerra Fría: catorce eventos que forjaron
+    la civilización tal como la conocemos hoy.
+  </p>
+  <nav class="legend">
+    <a href="#medieval"    class="legend-item"><span class="legend-dot" style="background:var(--medieval)"></span>Edad Media</a>
+    <a href="#exploration" class="legend-item"><span class="legend-dot" style="background:var(--exploration)"></span>Descubrimientos</a>
+    <a href="#revolution"  class="legend-item"><span class="legend-dot" style="background:var(--revolution)"></span>Revoluciones</a>
+    <a href="#modern"      class="legend-item"><span class="legend-dot" style="background:var(--modern)"></span>S. XIX</a>
+    <a href="#war"         class="legend-item"><span class="legend-dot" style="background:var(--war)"></span>Guerras Mundiales</a>
+    <a href="#coldwar"     class="legend-item"><span class="legend-dot" style="background:var(--coldwar)"></span>Guerra Fría</a>
+  </nav>
+</header>
+
+<main>
+
+  <!-- ═══════════════════════════════ ERA 1 ═══════════════════════════════ -->
+  <section id="medieval" class="era-section era-medieval">
+    <div class="era-header">
+      <span class="era-number">01</span>
+      <span class="era-stripe"></span>
+      <div>
+        <div class="era-title">Feudalismo</div>
+        <span class="era-period">Siglos IX – XV</span>
+      </div>
+    </div>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">s. IX–XV</div>
+          <span class="event-tag">Sistema político</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">El Feudalismo: orden, tierra y lealtad</div>
+          <p class="event-desc">
+            El feudalismo fue el sistema político, económico y social que organizó a Europa occidental durante más de cinco siglos. Se sustentaba en una pirámide de lealtades: el rey concedía tierras —llamadas feudos— a los nobles a cambio de servicio militar; estos, a su vez, los dividían entre señores menores y vasallos. En la base se encontraban los siervos, campesinos que trabajaban la tierra a cambio de protección.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            La Iglesia Católica constituyó un poder paralelo y frecuentemente superpuesto, legitimando a los monarcas y controlando la educación, el pensamiento y los recursos. Las cruzadas, las hambrunas y la Peste Negra de 1348 —que mató entre un tercio y la mitad de la población europea— aceleraron su declive. El renacimiento del comercio urbano y la formación de monarquías centralizadas fueron los factores finales de su derrumbe.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Carlomagno</span>
+            <span class="figure-chip">Guillermo el Conquistador</span>
+            <span class="figure-chip">Felipe IV de Francia</span>
+            <span class="figure-chip">Iglesia Católica</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Sentó las bases del concepto europeo de nación, propiedad y derecho. La tensión entre poder civil y religioso definió siglos de política occidental.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ ERA 2 ═══════════════════════════════ -->
+  <section id="exploration" class="era-section era-exploration">
+    <div class="era-header">
+      <span class="era-number">02</span>
+      <span class="era-stripe"></span>
+      <div>
+        <div class="era-title">Era de los Descubrimientos</div>
+        <span class="era-period">Siglo XV – XVI</span>
+      </div>
+    </div>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1492</div>
+          <span class="event-tag">Exploración</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">El Descubrimiento de América</div>
+          <p class="event-desc">
+            El 12 de octubre de 1492, Cristóbal Colón, al mando de tres carabelas patrocinadas por la Corona española, desembarcó en una isla del Caribe a la que llamó San Salvador. Colón moría convencido de haber alcanzado Asia; en realidad, había conectado dos mundos que llevaban milenios ignorándose mutuamente.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            El contacto desencadenó el llamado «intercambio colombino»: plantas, animales, enfermedades y tecnologías cruzaron el Atlántico en ambas direcciones. La viruela y el sarampión diezmaron a poblaciones indígenas sin inmunidad, destruyendo civilizaciones enteras. El oro y la plata americanos financiaron las monarquías europeas y sentaron las bases del capitalismo global. En paralelo, el comercio trasatlántico de esclavos —que desplazó a millones de africanos— configuró la composición demográfica y cultural de todo el continente americano.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Cristóbal Colón</span>
+            <span class="figure-chip">Isabel I de Castilla</span>
+            <span class="figure-chip">Hernán Cortés</span>
+            <span class="figure-chip">Francisco Pizarro</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Dio inicio a la primera globalización: el traslado de plantas, enfermedades, personas y riqueza que redibujó el mapa económico y cultural del planeta para siempre.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ ERA 3 ═══════════════════════════════ -->
+  <section id="revolution" class="era-section era-revolution">
+    <div class="era-header">
+      <span class="era-number">03</span>
+      <span class="era-stripe"></span>
+      <div>
+        <div class="era-title">Era de las Revoluciones</div>
+        <span class="era-period">Siglos XVIII – XIX</span>
+      </div>
+    </div>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1760</div>
+          <span class="event-tag">Industria</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Revolución Industrial</div>
+          <p class="event-desc">
+            Nacida en Gran Bretaña hacia 1760, la Revolución Industrial transformó radicalmente los modos de producción, transporte y vida cotidiana. La máquina de vapor de James Watt, perfeccionada en 1769, fue el símbolo de una era en la que el carbón y el hierro reemplazaron la fuerza humana y animal. Las fábricas concentraron a la población en ciudades, creando una nueva clase obrera sometida a condiciones laborales a menudo brutales.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            Los ferrocarriles encogieron las distancias, el telégrafo aceleró las comunicaciones y la producción en serie cambió el consumo. La brecha entre naciones industrializadas y las que no lo eran se convirtió en un nuevo eje de poder mundial, justificando el imperialismo europeo del siglo XIX.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">James Watt</span>
+            <span class="figure-chip">George Stephenson</span>
+            <span class="figure-chip">Karl Marx</span>
+            <span class="figure-chip">Friedrich Engels</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Creó el mundo moderno: urbanización masiva, clases medias y trabajadoras, movimiento sindical, capitalismo industrial y la huella de carbono que hoy define la crisis climática.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1789</div>
+          <span class="event-tag">Política</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Revolución Francesa</div>
+          <p class="event-desc">
+            La toma de la Bastilla el 14 de julio de 1789 simbolizó el fin del Antiguo Régimen en Francia. Impulsada por la crisis fiscal, el hambre y las ideas ilustradas de Rousseau, Voltaire y Montesquieu, la Revolución abolió los privilegios nobiliarios, proclamó los derechos del hombre y ejecutó a Luis XVI en la guillotina.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            El Terror jacobino demostró que la revolución podía devorar a sus propios hijos. El caos abrió el camino a Napoleón Bonaparte, quien exportó a cañonazos los ideales revolucionarios por toda Europa, redibujando fronteras y sembrando el nacionalismo moderno. La triada Liberté, Égalité, Fraternité se convirtió en el emblema de toda democracia posterior.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Robespierre</span>
+            <span class="figure-chip">Luis XVI</span>
+            <span class="figure-chip">Napoleón Bonaparte</span>
+            <span class="figure-chip">Marie Antoinette</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Estableció los fundamentos de la democracia liberal moderna: soberanía popular, derechos civiles, separación de poderes. Inspiró independencias en toda América Latina.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ ERA 4 ═══════════════════════════════ -->
+  <section id="modern" class="era-section era-modern">
+    <div class="era-header">
+      <span class="era-number">04</span>
+      <span class="era-stripe"></span>
+      <div>
+        <div class="era-title">Naciones en Conflicto</div>
+        <span class="era-period">Siglo XIX</span>
+      </div>
+    </div>
+    <div class="events-grid">
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1861–65</div>
+          <span class="event-tag">Guerra civil</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Guerra Civil Estadounidense</div>
+          <p class="event-desc">
+            Once estados sureños se separaron de la Unión en 1861 para formar la Confederación, defiendo la esclavitud como pilar de su economía agrícola. Los estados del norte, liderados por el presidente Abraham Lincoln, se negaron a reconocer la secesión. Durante cuatro años, el conflicto más mortífero de la historia estadounidense —con más de 620.000 bajas— asoló el país.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            La Proclamación de Emancipación de Lincoln en 1863 convirtió la guerra en una lucha explícita por la abolición. La rendición confederada en Appomattox en 1865 cerró la contienda, y las Enmiendas XIII, XIV y XV abolieron la esclavitud y garantizaron la ciudadanía a los afroamericanos, aunque su aplicación plena tardaría un siglo más en hacerse efectiva.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Abraham Lincoln</span>
+            <span class="figure-chip">Ulysses S. Grant</span>
+            <span class="figure-chip">Robert E. Lee</span>
+            <span class="figure-chip">Frederick Douglass</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Preservó la Unión y abolió la esclavitud, pero dejó heridas raciales profundas cuyas consecuencias se extienden hasta el movimiento por los derechos civiles del siglo XX y más allá.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ ERA 5 ═══════════════════════════════ -->
+  <section id="war" class="era-section era-war">
+    <div class="era-header">
+      <span class="era-number">05</span>
+      <span class="era-stripe"></span>
+      <div>
+        <div class="era-title">Las Guerras Mundiales</div>
+        <span class="era-period">1914 – 1945</span>
+      </div>
+    </div>
+    <div class="events-grid">
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1914–18</div>
+          <span class="event-tag">Guerra</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Primera Guerra Mundial</div>
+          <p class="event-desc">
+            El asesinato del archiduque Francisco Fernando de Austria en Sarajevo, el 28 de junio de 1914, activó el sistema de alianzas europeo como un dominó. En semanas, las grandes potencias estaban en guerra. Lo que se esperaba breve se convirtió en cuatro años de guerra de trincheras, gases tóxicos y carnicería industrial: más de 17 millones de muertos.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            El Tratado de Versalles (1919), humillante para Alemania, no resolvió sino que posponía los conflictos. Derrumbó cuatro imperios —el austro-húngaro, el otomano, el ruso y el alemán— y redibujó el mapa de Europa, sembrando las semillas de la Segunda Guerra Mundial.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Francisco Fernando</span>
+            <span class="figure-chip">Kaiser Guillermo II</span>
+            <span class="figure-chip">Woodrow Wilson</span>
+            <span class="figure-chip">Gavrilo Princip</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Fin de cuatro imperios, nacimiento de nuevas naciones y de la Liga de Naciones. El resentimiento alemán ante Versalles fue el caldo de cultivo del nazismo.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1917</div>
+          <span class="event-tag">Revolución</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Revolución Rusa</div>
+          <p class="event-desc">
+            En febrero de 1917, el hambre y la desesperación por la guerra provocaron la caída del zar Nicolás II. El vacío de poder fue ocupado por un gobierno provisional, pero en octubre, los bolcheviques de Lenin lo derrocaron con el lema «Paz, tierra y pan». Rusia firmó la paz con Alemania y se retiró de la guerra, enfrentando a continuación una brutal guerra civil.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            La victoria bolchevique creó la Unión Soviética en 1922, el primer Estado comunista de la historia. Stalin, que tomó el poder tras la muerte de Lenin en 1924, transformó al país mediante industrialización forzada y terror político, con millones de víctimas en el Gulag. El experimento soviético dividió el mundo durante más de siete décadas.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Lenin</span>
+            <span class="figure-chip">León Trotsky</span>
+            <span class="figure-chip">Nicolás II</span>
+            <span class="figure-chip">Stalin</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Creó la URSS y definió el comunismo como alternativa al capitalismo, inaugurando la pugna ideológica que estructuró el siglo XX y motivó docenas de conflictos globales.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1929</div>
+          <span class="event-tag">Economía</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Gran Depresión</div>
+          <p class="event-desc">
+            El Jueves Negro del 24 de octubre de 1929 fue el inicio del mayor colapso económico del capitalismo moderno. La Bolsa de Nueva York se desplomó, arrastrando a los bancos, las fábricas y a millones de familias. El desempleo en Estados Unidos alcanzó el 25%; en Alemania, rozó el 30%.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            La miseria y la desesperación social crearon el terreno fértil para el ascenso de los extremismos. En Alemania, el Partido Nazi explotó la crisis económica y el resentimiento posbélico para llevar a Hitler al poder. La respuesta keynesiana del New Deal de Roosevelt en Estados Unidos marcó el comienzo de la política económica intervencionista que moldearía el capitalismo de posguerra.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Herbert Hoover</span>
+            <span class="figure-chip">Franklin D. Roosevelt</span>
+            <span class="figure-chip">John Maynard Keynes</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Redefinió el papel del Estado en la economía, impulsó el Estado de bienestar y pavimentó el camino al fascismo europeo y a la Segunda Guerra Mundial.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1936–39</div>
+          <span class="event-tag">Guerra civil</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Guerra Civil Española</div>
+          <p class="event-desc">
+            El 17 de julio de 1936, el general Francisco Franco encabezó un golpe de Estado contra la Segunda República Española. El fracaso parcial del golpe desembocó en una sangrienta guerra civil de tres años entre republicanos y nacionales. La contienda atrajo a combatientes extranjeros: las Brigadas Internacionales defendieron la República; la Alemania nazi y la Italia fascista apoyaron a Franco con tropas y armamento.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            El bombardeo nazi de la ciudad vasca de Guernica inspiró el cuadro más famoso de Picasso y reveló al mundo la brutalidad de los ataques a civiles. La victoria franquista en 1939 instauró una dictadura que duraría hasta la muerte del general en 1975.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Francisco Franco</span>
+            <span class="figure-chip">Manuel Azaña</span>
+            <span class="figure-chip">George Orwell</span>
+            <span class="figure-chip">Pablo Picasso</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Ensayo general de la Segunda Guerra Mundial y del terror aéreo sobre civiles. Demostró la inoperancia de las democracias occidentales frente al fascismo.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1939–45</div>
+          <span class="event-tag">Guerra</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Segunda Guerra Mundial</div>
+          <p class="event-desc">
+            El 1 de septiembre de 1939, Alemania invadió Polonia. En seis años, el conflicto se extendió por Europa, África, Asia y los océanos, convirtiéndose en la guerra más devastadora de la historia: entre 70 y 85 millones de muertos, de los cuales más de la mitad eran civiles. El Holocausto, planificado por el régimen nazi, exterminó a seis millones de judíos y millones de otras víctimas.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            La guerra terminó con las bombas atómicas sobre Hiroshima y Nagasaki en agosto de 1945, inaugurando la era nuclear. La victoria aliada redibujó el mundo: nacieron la ONU, el Plan Marshall, la OTAN, el Estado de Israel y el telón de acero que dividiría Europa durante medio siglo.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Adolf Hitler</span>
+            <span class="figure-chip">Winston Churchill</span>
+            <span class="figure-chip">Franklin D. Roosevelt</span>
+            <span class="figure-chip">Stalin</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Fundó el orden internacional de posguerra: ONU, derechos humanos, descolonización, era atómica. El mundo que conocemos hoy fue construido sobre sus escombros.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">7 dic. 1941</div>
+          <span class="event-tag">Ataque</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">El Ataque a Pearl Harbor</div>
+          <p class="event-desc">
+            A las 7:48 de la mañana del 7 de diciembre de 1941, 353 aeronaves japonesas atacaron por sorpresa la base naval estadounidense de Pearl Harbor, en Hawái. En dos horas, 2.403 estadounidenses murieron, 19 barcos fueron hundidos o dañados y 347 aviones destruidos. El presidente Roosevelt lo llamó «una fecha que vivirá en la infamia».
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            El ataque arrastró a Estados Unidos a la Segunda Guerra Mundial, tanto en el Pacífico como en Europa. Con el poderío industrial y militar americano volcado en el conflicto, el equilibrio de fuerzas se inclinó decisivamente hacia los Aliados. Japón, que buscaba neutralizar la flota del Pacífico, logró lo contrario: despertar a un gigante dormido.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Franklin D. Roosevelt</span>
+            <span class="figure-chip">Isoroku Yamamoto</span>
+            <span class="figure-chip">Chuichi Nagumo</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Convirtió a EE.UU. en potencia beligerante activa, acelerando la derrota del Eje y consolidando el liderazgo norteamericano del orden mundial de posguerra.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════════ ERA 6 ═══════════════════════════════ -->
+  <section id="coldwar" class="era-section era-coldwar">
+    <div class="era-header">
+      <span class="era-number">06</span>
+      <span class="era-stripe"></span>
+      <div>
+        <div class="era-title">La Guerra Fría</div>
+        <span class="era-period">1947 – 1991</span>
+      </div>
+    </div>
+    <div class="events-grid">
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1955</div>
+          <span class="event-tag">Geopolítica</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">El Pacto de Varsovia</div>
+          <p class="event-desc">
+            Firmado el 14 de mayo de 1955 en respuesta a la adhesión de Alemania Occidental a la OTAN, el Pacto de Varsovia agrupó a la URSS, Polonia, Checoslovaquia, Hungría, Rumanía, Bulgaria, Albania y Alemania Oriental bajo un mando militar unificado. Fue el contrapeso soviético a la alianza atlántica y la institucionalización del bloque del Este.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            El pacto fue invocado en 1968 para justificar la invasión de Checoslovaquia —la Doctrina Brézhnev— y reprimir la Primavera de Praga. Las tensiones internas, la carrera armamentística y el estancamiento económico soviético erosionaron progresivamente el bloque hasta su disolución en 1991.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Nikita Jrushchov</span>
+            <span class="figure-chip">Leonid Brézhnev</span>
+            <span class="figure-chip">Dwight Eisenhower</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Codificó la división del mundo en dos bloques, determinando la política, la economía y los conflictos de decenas de países durante cuatro décadas.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">1966–76</div>
+          <span class="event-tag">Revolución</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Revolución Cultural China</div>
+          <p class="event-desc">
+            En 1966, Mao Zedong lanzó la Gran Revolución Cultural Proletaria para purgar al Partido Comunista de sus rivales y renovar el fervor revolucionario. Movilizó a millones de jóvenes —las Guardias Rojas— para atacar a intelectuales, profesores, artistas y a cualquier símbolo de la cultura «burguesa» o «feudal». Templos, libros y obras de arte fueron destruidos.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            Las estimaciones de víctimas oscilan entre uno y dos millones de muertos directos y decenas de millones de vidas arruinadas por la persecución, el trabajo forzado y la privación educativa. La Revolución Cultural detuvo el desarrollo económico chino durante una década y dejó cicatrices generacionales que todavía marcan a la sociedad china.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Mao Zedong</span>
+            <span class="figure-chip">Lin Biao</span>
+            <span class="figure-chip">Banda de los Cuatro</span>
+            <span class="figure-chip">Deng Xiaoping</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Traumatizó una generación entera y destruyó un patrimonio cultural milenario. Paradójicamente, su fracaso preparó el terreno para las reformas de Deng y el auge económico chino.</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-card">
+        <div class="event-year-col">
+          <div class="event-year">9 nov. 1989</div>
+          <span class="event-tag">Fin de era</span>
+        </div>
+        <div class="event-body">
+          <div class="event-title">La Caída del Muro de Berlín</div>
+          <p class="event-desc">
+            Construido en una sola noche el 13 de agosto de 1961, el Muro de Berlín separó durante 28 años a familias, amigos y una ciudad entera. Era el símbolo más poderoso de la Guerra Fría y de la división del mundo. El 9 de noviembre de 1989, desbordado por las protestas populares y un anuncio gubernamental mal interpretado, el muro cayó entre escenas de euforia colectiva.
+          </p>
+          <p class="event-desc" style="margin-top:0.75rem">
+            La caída del muro aceleró la reunificación alemana (1990), la disolución del bloque soviético y, finalmente, la desintegración de la Unión Soviética en 1991. Francis Fukuyama proclamó «el fin de la historia»; el capitalismo liberal parecía haberse impuesto definitivamente. El mundo unipolar que siguió no fue, sin embargo, ni tan estable ni tan pacífico como se esperaba.
+          </p>
+          <div class="event-figures">
+            <span class="figure-chip">Mijaíl Gorbachov</span>
+            <span class="figure-chip">Helmut Kohl</span>
+            <span class="figure-chip">Ronald Reagan</span>
+            <span class="figure-chip">Günter Schabowski</span>
+          </div>
+          <div class="event-impact">
+            <span class="impact-label">Legado</span>
+            <span>Marcó el fin de la Guerra Fría y del orden bipolar. Abrió la era de la globalización neoliberal y redefinió el mapa político de Europa y del mundo entero.</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Historia Mundial — Compendio de Catorce Eventos Fundamentales &nbsp;·&nbsp; Todos los siglos, una sola página</p>
+</footer>
+
+<script>
+  const sections = document.querySelectorAll('.era-section');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.07 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
